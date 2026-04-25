@@ -1,5 +1,16 @@
 import { useState, useRef } from "react";
+function cekLimit() {
+  const limit = 5;
+  const used = Number(localStorage.getItem("used") || 0);
 
+  if (used >= limit) {
+    return false;
+  }
+
+  localStorage.setItem("used", used + 1);
+  return true;
+}
+import heroImg from "./assets/template3.png";
 const KURIKULUM = {
   1: ["Bilangan Cacah","Operasi Hitung","Pola","Pengukuran","Bangun Datar","Data"],
   2: ["Bilangan Cacah","Operasi Hitung","Pengukuran","Bangun Datar & Ruang","Data"],
@@ -135,7 +146,7 @@ Balas HANYA JSON valid tanpa teks lain:
       const data=await res.json();
       const txt=(data.content||[]).map(b=>b.text||"").join("");
       const parsed=JSON.parse(txt.replace(/```json|```/g,"").trim());
-      clearInterval(iv);setLoading(false);
+      clearInterval(iv);setLoadijng(false);
       return parsed.soal||[];
     }catch(e){
       clearInterval(iv);setLoading(false);
@@ -145,15 +156,39 @@ Balas HANYA JSON valid tanpa teks lain:
   }
 
   async function startGame(){
-    if(!name.trim()){nameRef.current?.focus();return;}
-    const soal=await generate();
-    if(soal.length>0){setQuestions(soal);resetQ(0);setScore(0);setPage("question");}
+  if(!name.trim()){nameRef.current?.focus();return;}
+
+  // 🔥 LIMIT GRATIS
+  if (!cekLimit()) {
+    setError("Jatah gratis sudah habis 😢");
+    return;
   }
 
-  async function regen(){
-    const soal=await generate(Date.now().toString());
-    if(soal.length>0){setQuestions(soal);resetQ(0);setScore(0);setPage("question");}
+  const soal=await generate();
+  if(soal.length>0){
+    setQuestions(soal);
+    resetQ(0);
+    setScore(0);
+    setPage("question");
   }
+}
+
+  async function regen(){
+
+  // 🔥 LIMIT GRATIS
+  if (!cekLimit()) {
+    setError("Jatah gratis sudah habis 😳");
+    return;
+  }
+
+  const soal=await generate(Date.now().toString());
+  if(soal.length>0){
+    setQuestions(soal);
+    resetQ(0);
+    setScore(0);
+    setPage("question");
+  }
+}
 
   function choose(opt){
     if(confirmed)return;
@@ -225,8 +260,20 @@ Balas HANYA JSON valid tanpa teks lain:
     position:"relative",
     overflow:"hidden"
   }}>
-
-    {/* dekor angka background */}
+<img
+  src={heroImg}
+  style={{
+    position:"absolute",
+    right:"-120px",
+    bottom:"-40px",
+    width:"520px",
+    opacity:0.3,
+    filter:"none",
+    mixBlendMode:"soft-light",
+    pointerEvents:"none"
+  }}
+/>   
+{/* dekor angka background */}
     {[["1","6%","12%","0s"],["÷","88%","18%","1.3s"],["+","10%","66%","0.7s"],["2","82%","62%","1.9s"],["=","46%","84%","1s"],["×","55%","9%","1.6s"]].map(([n,l,t,d])=>(
       <div key={n+l} style={{
         position:"absolute",
