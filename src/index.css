@@ -1,0 +1,87 @@
+import { useState } from "react";
+
+function App() {
+  const [nama, setNama] = useState("");
+  const [kelas, setKelas] = useState(null);
+  const [tema, setTema] = useState("");
+  const [level, setLevel] = useState("");
+  const [jumlah, setJumlah] = useState(null);
+
+  const styleBtn = (selected, value) => ({
+    margin: "5px",
+    padding: "10px",
+    background: selected === value ? "yellow" : "white",
+    color: "black",
+    border: "1px solid #ccc",
+    cursor: "pointer"
+  });
+
+  return (
+    <div style={{
+      background: "linear-gradient(to bottom, #6d28d9, #9333ea)",
+      minHeight: "100vh",
+      color: "white",
+      padding: "20px"
+    }}>
+      <h1>Atur Parameter Belajar</h1>
+
+      <h3>Nama Siswa</h3>
+      <input
+        value={nama}
+        onChange={(e) => setNama(e.target.value)}
+        placeholder="Masukkan nama"
+      />
+
+      <h3>Pilih Kelas</h3>
+      {[1,2,3,4,5,6].map(k => (
+        <button key={k} style={styleBtn(kelas, k)} onClick={() => setKelas(k)}>
+          {k}
+        </button>
+      ))}
+
+      <h3>Pilih Tema</h3>
+      {["Bilangan", "Operasi", "Pola"].map(t => (
+        <button key={t} style={styleBtn(tema, t)} onClick={() => setTema(t)}>
+          {t}
+        </button>
+      ))}
+
+      <h3>Level</h3>
+      {["Mudah", "Sedang", "Sulit"].map(l => (
+        <button key={l} style={styleBtn(level, l)} onClick={() => setLevel(l)}>
+          {l}
+        </button>
+      ))}
+
+      <h3>Jumlah Soal</h3>
+      {[10,20].map(j => (
+        <button key={j} style={styleBtn(jumlah, j)} onClick={() => setJumlah(j)}>
+          {j}
+        </button>
+      ))}
+
+      <div style={{ marginTop: "20px" }}>
+        <b>Ringkasan:</b><br />
+        Nama: {nama} <br />
+        Kelas: {kelas} <br />
+        Tema: {tema} <br />
+        Level: {level} <br />
+        Jumlah: {jumlah}
+      </div>
+
+      <br />
+      <button
+        disabled={!nama || !kelas || !tema || !level || !jumlah}
+        style={{
+          background: !nama || !kelas || !tema || !level || !jumlah ? "gray" : "yellow",
+          color: "black",
+          padding: "10px 20px"
+        }}
+      >
+        Mulai Soal 🚀
+      </button>
+    </div>
+  );
+}
+
+export default App;
