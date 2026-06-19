@@ -1128,19 +1128,22 @@ export default function App() {
         email,
       });
 
-      const res = await fetch("http://localhost:3000/api/soal", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          kelas: kelas,
-          tema: tema,
-          level: level,
-          jumlah: jumlah,
-          email: email, // ✅ aman & eksplisit
-        }),
-      });
+      const res = await fetch(
+  "https://playbook-matematika.onrender.com/api/soal",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      kelas,
+      tema,
+      level,
+      jumlah,
+      email,
+    }),
+  }
+);
 
       const data = await res.json();
 
